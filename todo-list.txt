@@ -1,0 +1,10 @@
+Get images from flickr
+Get images from google locations
+Clear noisy images
+Learn keras
+Extract features
+Build neural network
+Test
+Test
+Improve
+Test
