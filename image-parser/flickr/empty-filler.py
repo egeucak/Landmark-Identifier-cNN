@@ -10,18 +10,19 @@ def create_url(id, server, farm, secret):
     url = "https://farm{}.staticflickr.com/{}/{}_{}.jpg".format(farm, server, id, secret)
     return url
 
-def flickr_download(keyword, city):
+def flickr_download(keyword):
     geolocator = Nominatim()
     #location = geolocator.geocode(city)
     photos = flickr.walk(text = keyword,
-                         tags = keyword,
+                         #tags = keyword,
                          per_page=200,
                          sort="relevance",
+                         safe_search = "moderate",
                          #accuracy=11,
                          #lat=location.latitude,
                          #lon=location.longitude
                          )
-    os.makedirs("images/"+keyword, exist_ok=True)
+    os.makedirs("imagesEmpty/"+keyword, exist_ok=True)
     for count, photo in enumerate(photos):
         try:
             secret = photo.get('secret')
@@ -29,7 +30,7 @@ def flickr_download(keyword, city):
             server = photo.get('server')
             farm = photo.get('farm')
             url = create_url(id, server, farm, secret)
-            file_name = "images/{}/{}_{}.jpg".format(keyword, keyword, id)
+            file_name = "imagesEmpty/{}/{}_{}.jpg".format(keyword, keyword, id)
             download_image(file_name, url)
         except Exception as e:
             print("Failed to download image")
@@ -42,13 +43,9 @@ def download_image(name, url):
         handler.write(img_data)
 
 def main():
-    location = "../../locations"
-    for text in os.listdir(location):
-        city = text.split(".")[0]
-        if text.split(".")[-1] == "txt":
-            file = open(location+"/"+text).read().splitlines()
-            for place in file:
-                print("Downloading {}...".format(place))
-                flickr_download(place, city)
+	file = open("bos.txt").read().splitlines()
+	for place in file:
+		print("Downloading {}...".format(place))
+		flickr_download(place)
 
 main()
