@@ -1,5 +1,6 @@
 import numpy as np
 import os, sys, getopt
+import time
 """
 #########################################################
 #   Input file is a text file that has paths of images  #
@@ -73,8 +74,10 @@ def main(argv):
             for image_path in reader:
                 image_path = image_path.strip()
                 input_image = caffe.io.load_image(image_path)
+                begin_time = time.time()
                 prediction = net.predict([input_image], oversample=False)
                 print("------")
+                print("Extracted features in {} seconds".format(time.time()-begin_time))
                 print (os.path.basename(image_path), ' : ' , ' (', prediction[0][prediction[0].argmax()] , ')')
                 print(len(net.blobs[layer_name].data[0].reshape(1,-1)[0]))
                 #np.savetxt(writer, net.blobs[layer_name].data[0].reshape(1,-1), fmt='%.8g')
