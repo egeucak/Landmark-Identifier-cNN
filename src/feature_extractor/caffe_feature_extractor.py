@@ -28,23 +28,8 @@ layer_name = 'pool5'
 import caffe
 
 def main(argv):
-    inputfile = ''
-    outputfile = ''
-
-    try:
-        opts, args = getopt.getopt(argv,"hi:o:",["ifile=","ofile="])
-    except getopt.GetoptError:
-        print ('caffe_feature_extractor.py -i <inputfile> -o <outputfile>')
-        sys.exit(2)
-
-    for opt, arg in opts:
-        if opt == '-h':
-            print ('caffe_feature_extractor.py -i <inputfile> -o <outputfile>')
-            sys.exit()
-        elif opt in ("-i"):
-            inputfile = arg
-        elif opt in ("-o"):
-            outputfile = arg
+    inputfile = 'input.txt'
+    outputfile = 'output.npy'
 
     print ('Reading images from "', inputfile)
     print ('Writing vectors to "', outputfile)
@@ -67,6 +52,8 @@ def main(argv):
     #print ([(k, v.data.shape) for k, v in net.blobs.items()])
     #exit()
 
+    weights = []
+
     # Processing one image at a time, printint predictions and writing the vector to a file
     with open(inputfile, 'r') as reader:
         with open(outputfile, 'w') as writer:
@@ -74,14 +61,16 @@ def main(argv):
             for image_path in reader:
                 image_path = image_path.strip()
                 input_image = caffe.io.load_image(image_path)
-                begin_time = time.time()
                 prediction = net.predict([input_image], oversample=False)
-                print("------")
-                print("Extracted features in {} seconds".format(time.time()-begin_time))
+                '''print("------")
                 print (os.path.basename(image_path), ' : ' , ' (', prediction[0][prediction[0].argmax()] , ')')
-                print(len(net.blobs[layer_name].data[0].reshape(1,-1)[0]))
+                print(len(net.blobs[layer_name].data[0].reshape(1,-1)[0]))'''
+                print("Doing the thing...")
+                weights.append(net.blobs[layer_name].data[0].reshape(1,-1)[0])
                 #np.savetxt(writer, net.blobs[layer_name].data[0].reshape(1,-1), fmt='%.8g')
-                print("------")
+                #print("------")
+    weights = np.asarray(weights)
+    np.save(outputfile, weights)
 
 if __name__ == "__main__":
     main(sys.argv[1:])

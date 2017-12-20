@@ -1,0 +1,191 @@
+0	1. TBMM Kurtuluş Savaşı Müzesi
+1	50. Yıl Parkı
+2	Ahrida Sinagogu
+3	Anadolu Hisarı
+4	Anadolu Medeniyetleri Müzesi
+5	Anemas Zindanları
+6	Anfa Altınpark
+7	Ankamall AVM
+8	Ankara Devlet Resim ve Heykel Müzesi
+9	Ankara Kalesi
+10	Ankara Zafer Anıtı
+11	Anıtkabir
+12	Aqua Vega Akvaryum
+13	Armada Alışveriş ve İş Merkezi
+14	Aslanhane Camisi
+15	Atakule
+16	Atatürk Arboretumu
+17	Atatürk Evi Müzesi
+18	Atatürk Orman Çiftliği
+19	Augustus Tapınağı
+20	Avrupa Pasajı
+21	Ayasofya Müzesi
+22	Bebek Sahili
+23	Beyazıt Camii
+24	Beyazıt Meydanı
+25	Beşiktaş Vodafone Arena
+26	Botanik Parkı
+27	Bozdoğan Kemeri
+28	Boğaziçi Köprüsü
+29	Büyük Yeni Han
+30	Büyükada Rum Yetimhanesi
+31	Capital AVM
+32	Cepa AVM
+33	Cer Modern
+34	CerModern
+35	Cevahir AVM
+36	Congresium
+37	Devlet Mezarlığı Müzesi
+38	Dikmen Vadisi Park
+39	Dimitri Kantemir Evi
+40	Dolmabahçe Sarayı
+41	Emirgan Korusu
+42	Emirgan Parkı
+43	Etnografya Müzesi
+44	Eyüp Sultan Camii
+45	Fatih Camii
+46	Fatih Korusu
+47	Fatih Sultan Mehmet Köprüsü
+48	Fener Balat Cibali
+49	Fener Rum Patrikhanesi
+50	Fransız Sokağı (La Rue Française)
+51	Galata Kulesi
+52	Galata Köprüsü
+53	Galata Mevlevihanesi
+54	Galleria AVM
+55	Goksu Park
+56	Gordion AVM
+57	Gordion Müzesi
+58	Gökyay Vakfı Satranç Müzesi
+59	Gülhane Ahmet Hamdi Tanpınar Kütüphanesi
+60	Gülhane Parkı
+61	Hacı Bayram Camisi
+62	Hamamönü
+63	Harikalar Diyarı
+64	Haydarpaşa Garı
+65	Heybeliada Terk-i Dünya Kilisesi
+66	Hidiv Kasrı
+67	Hipodrom
+68	Hüseyin Rahmi Gürpınar Evi
+69	II. Türkiye Büyük Millet Meclisi Cumhuriyet Müzesi
+70	Japon Bahçesi
+71	Jülien Sütunu
+72	Kalendarhane Camii
+73	Kanlı Kilise
+74	Kanyon AVM
+75	Kapalı Çarşı
+76	Kariye Müzesi
+77	Kilyos Plajı
+78	Kocatepe Camisi
+79	Kuzguncuk Evleri
+80	Kuğulu Park
+81	Kız Kulesi
+82	Kızılay Meydanı
+83	Laleli Taşhan
+84	Mehmet Akif Ersoy Evi
+85	Metrocity AVM
+86	Miniatürk
+87	Next Level AVM
+88	Ortaköy Camii
+89	Oyuncak Müzesi
+90	Panorama 1453 Müzesi
+91	Pembe Köşk
+92	Pierre Loti Tepesi
+93	Rahmi M Koç Müzesi
+94	Roma Duvarı
+95	Roma Hamamları
+96	Roma Hamamı Açıkhava Müzesi
+97	Rumeli Hisari
+98	Sahaflar Çarşısı
+99	Sakıp Sabancı Müzesi
+100	Segmenler Parkı
+101	Stefan Sveti Kilisesi
+102	Sultanahmet Camii
+103	Süleymaniye Camii
+104	Süleymaniye Hamamı
+105	TBMM
+106	Taksim Meydanı
+107	Taksim – Beyoğlu – İstiklal Caddesi
+108	Topkapı Sarayı
+109	Türk Telekom Arena
+110	Vialand 
+111	Yavuz Sultan Selim Köprüsü
+112	Yedikule Hisarı
+113	Yerebatan Sarnıcı
+114	agora ören yeri
+115	ahmet piriştina kent arşivi ve müzesi
+116	alsancak katolik kilisesi
+117	arkas deniz tarihi merkezi
+118	arkas sanat merkezi
+119	atatürk stadyumu
+120	ayios haralambos kilisesi
+121	açık hava arkeoloji müzesi
+122	belkahve geçidi
+123	bet israle sinagogu
+124	birgi çakırağa konağı
+125	bornova büyük park
+126	buca gölet
+127	buca protestan baptist kilisesi
+128	dünya barış anıtı
+129	efes antik kenti
+130	forbes köşkü
+131	havra sokağı
+132	hergele meydanı
+133	hisar camii
+134	homeros vadisi
+135	hükümet konağı
+136	inciraltı kent ormanı
+137	istiklal Caddesi
+138	istinye Park AVM
+139	izmir arkeoloji müzesi
+140	izmir atatürk anıtı
+141	izmir atatürk müzesi
+142	izmir cumhuriyet meydanı
+143	izmir doğal yaşam parkı
+144	izmir etnografya müzesi
+145	izmir mask müzesi
+146	izmir resim heykel müzesi ve galerisi
+147	izmir saat kulesi
+148	izmir tarih ve sanat müzesi
+149	kadifekale
+150	karagöl tabiat parkı
+151	karşıyaka tarihi tren istasyonu
+152	karşıyaka çarşısı
+153	karşıyaka özgürlük heykeli
+154	kemal paşa camii
+155	kemeraltı
+156	kestanepazarı camii
+157	key muesum
+158	konak meydanı
+159	konak pier
+160	konak yalı camii
+161	kordon
+162	kültürpark
+163	kızlarağası hanı
+164	osman bey parkı
+165	paraşüt kulesi
+166	penetti köşkü
+167	saint polycarpe kilisesi
+168	saslı piknik alanı
+169	smyrna agora antik kent
+170	st. jean kilises
+171	susuzdede parkı
+172	tarihi asansör
+173	umran baradan oyun ve oyuncak muzesi
+174	uşakizade köşkü
+175	yamanlar dağı
+176	yeşilova höyüğü
+177	yunuslar heykeli
+178	zübeyde hanım parkı
+179	Çamlıca Tepesi
+180	Çandarlı Halil Kulesi
+181	Çağaloğlu Hamamı
+182	Çinili Cami
+183	Çırağan Sarayı
+184	İngiliz Kırım Kilisesi
+185	İstanbul Akvaryum
+186	İstanbul Arkeoloji Müzesi
+187	İstanbul Erkek Lisesi
+188	Şile Deniz Feneri
+189	Şükrü Saraçoğlu
+190	şadırvan camii
