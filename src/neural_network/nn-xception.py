@@ -1,19 +1,14 @@
-from debian.debtags import output
 from keras.applications.xception import Xception
-from keras.preprocessing import image
 from keras.preprocessing.image import ImageDataGenerator
 from keras.applications.xception import preprocess_input, decode_predictions
-from keras.layers import Dense, GlobalAveragePooling2D
+from keras.layers import Dense, GlobalAveragePooling2D, Dropout
 from keras.models import Model
 from keras.optimizers import Adamax
 import numpy as np
+import keras
 
 import os
-import sys
 import glob
-import argparse
-import matplotlib.pyplot as plt
-
 
 def get_nb_files(directory):
     """Get number of files by searching directory recursively"""
@@ -25,55 +20,74 @@ def get_nb_files(directory):
             cnt += len(glob.glob(os.path.join(r, dr + "/*")))
     return cnt
 
-train_dir = "images"
-nb_train_samples = get_nb_files(train_dir)
-nb_classes = len(glob.glob(train_dir + "/*"))
-nb_epoch = 50
-batch_size = 20
+def main():
+    train_dir = "images"
+    nb_train_samples = get_nb_files(train_dir)
+    nb_classes = len(glob.glob(train_dir + "/*"))
+    nb_epoch = 50
+    batch_size = 20
 
-train_datagen = ImageDataGenerator(
-    preprocessing_function=preprocess_input,
-    rotation_range=30,
-    width_shift_range=0.2,
-    height_shift_range=0.2,
-    shear_range=0.2,
-    zoom_range=0.2,
-    horizontal_flip=True
-)
+    train_datagen = ImageDataGenerator(
+        rescale=1./255,
+        preprocessing_function=preprocess_input,
+        rotation_range=30,
+        width_shift_range=0.2,
+        height_shift_range=0.2,
+        shear_range=0.2,
+        zoom_range=0.2,
+        horizontal_flip=True
+    )
 
-train_generator = train_datagen.flow_from_directory(
-    train_dir,
-    target_size=(500,500),
-    batch_size=batch_size
-)
+    train_generator = train_datagen.flow_from_directory(
+        train_dir,
+        target_size=(250,250),
+        batch_size=batch_size
+    )
 
-sgd = Adamax()
 
-model = Xception(weights='imagenet',
-                 include_top=False)
+    output_file = "labels.npy"
+    target = np.load(output_file)
 
-input_file = "input.txt"
-output_file = "labels.npy"
-target = np.load(output_file)
+    sgd = Adamax()
+    model = Xception(weights='imagenet',
+                     include_top=False)
 
-for layer in model.layers[:-1]:
-    layer.trainable = False
+    for layer in model.layers:
+        layer.trainable = False
 
-#model.add(Dense(len(target[0]), activation='softmax'))
+    x = model.output
+    x = GlobalAveragePooling2D()(x)
+    x = Dense(len(target[0]), activation='relu')(x)
+    x = Dropout(rate=0.3)(x)
+    predictions = Dense(nb_classes, activation='softmax')(x)
+    model = Model(inputs=model.input, outputs=predictions)
 
-x = model.output
-x = GlobalAveragePooling2D()(x)
-x = Dense(len(target[0]), activation='relu')(x)
-predictions = Dense(nb_classes, activation='softmax')(x)
-model = Model(input = model.input, output=predictions)
+    model.compile(loss='categorical_crossentropy',
+                  optimizer=sgd,
+                  metrics=['accuracy'])
 
-model.compile(loss='categorical_crossentropy',
-              optimizer=sgd,
-              metrics=['accuracy'])
+    early_stop = keras.callbacks.EarlyStopping(monitor='acc',
+                                               min_delta=0,
+                                               patience=10,
+                                               verbose=0,
+                                               mode='auto'
+                                               )
+    check_point_file = "weights-checkpoint.hdf5"
+    check_point = keras.callbacks.ModelCheckpoint(filepath=check_point_file,
+                                                  monitor='val_acc',
+                                                  verbose=1
+                                                  )
+    try:
+        model.fit_generator(
+            generator=train_generator,
+            steps_per_epoch=nb_train_samples/20,
+            epochs=nb_epoch,
+            class_weight='auto',
+            callbacks=[early_stop, check_point],
+            shuffle=True
+        )
+        model.save("model.h5")
+    except Exception:
+        model.save("model.h5")
 
-model.fit_generator(
-    generator=train_generator,
-    samples_per_epoch=nb_train_samples,
-    nb_epoch=nb_epoch,
-    class_weight='auto'
-)
+main()
