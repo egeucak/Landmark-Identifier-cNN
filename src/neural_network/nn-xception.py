@@ -1,7 +1,7 @@
 from keras.applications.xception import Xception
 from keras.preprocessing.image import ImageDataGenerator
 from keras.applications.xception import preprocess_input, decode_predictions
-from keras.layers import Dense, GlobalAveragePooling2D, Dropout
+from keras.layers import Dense, GlobalAveragePooling2D, Dropout, Flatten, Reshape
 from keras.models import Model
 from keras.optimizers import Adamax
 import numpy as np
@@ -24,8 +24,8 @@ def main():
     train_dir = "images"
     nb_train_samples = get_nb_files(train_dir)
     nb_classes = len(glob.glob(train_dir + "/*"))
-    nb_epoch = 50
-    batch_size = 20
+    nb_epoch = 200
+    batch_size = 50
 
     train_datagen = ImageDataGenerator(
         rescale=1./255,
@@ -40,7 +40,7 @@ def main():
 
     train_generator = train_datagen.flow_from_directory(
         train_dir,
-        target_size=(250,250),
+        target_size=(200,200),
         batch_size=batch_size
     )
 
@@ -48,7 +48,7 @@ def main():
     output_file = "labels.npy"
     target = np.load(output_file)
 
-    sgd = Adamax()
+    sgd = Adamax(lr=0.006)
     model = Xception(weights='imagenet',
                      include_top=False)
 
@@ -57,8 +57,7 @@ def main():
 
     x = model.output
     x = GlobalAveragePooling2D()(x)
-    x = Dense(len(target[0]), activation='relu')(x)
-    x = Dropout(rate=0.3)(x)
+    #x = Dense(len(target[0]), activation='relu')(x)
     predictions = Dense(nb_classes, activation='softmax')(x)
     model = Model(inputs=model.input, outputs=predictions)
 
@@ -80,14 +79,14 @@ def main():
     try:
         model.fit_generator(
             generator=train_generator,
-            steps_per_epoch=nb_train_samples/20,
+            steps_per_epoch=nb_train_samples,
             epochs=nb_epoch,
             class_weight='auto',
             callbacks=[early_stop, check_point],
             shuffle=True
         )
         model.save("model.h5")
-    except Exception:
+    except KeyboardInterrupt:
         model.save("model.h5")
 
 main()
