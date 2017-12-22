@@ -21,7 +21,8 @@ def get_nb_files(directory):
     return cnt
 
 def main():
-    train_dir = "images"
+    #train_dir = "images"
+    train_dir = '/home/ege/Desktop/machine learning/project/data/Yeni klasör TMM'
     nb_train_samples = get_nb_files(train_dir)
     nb_classes = len(glob.glob(train_dir + "/*"))
     nb_epoch = 200
@@ -40,7 +41,7 @@ def main():
 
     train_generator = train_datagen.flow_from_directory(
         train_dir,
-        target_size=(200,200),
+        target_size=(40,40),
         batch_size=batch_size
     )
 

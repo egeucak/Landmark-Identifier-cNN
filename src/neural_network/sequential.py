@@ -6,56 +6,51 @@ from keras.layers import Dense, Dropout, Flatten
 from keras.layers import Convolution2D, MaxPooling2D
 from keras.preprocessing.image import img_to_array
 from keras.preprocessing.image import load_img
+from keras.preprocessing.image import ImageDataGenerator
+from time import time
+import glob
 
 #location = 'C:/Users/Mavi/PycharmProjects/wc/photographs/Yeni klasör TMM/'
-location = 'C:/Users/Mavi/PycharmProjects/wc/images/images/'
+train_dir = '/home/ege/Desktop/machine learning/project/data/Yeni klasör TMM/'
 
-def recursiveDir(location,folders): #gets image paths
+def get_nb_files(directory):
+    """Get number of files by searching directory recursively"""
+    if not os.path.exists(directory):
+        return 0
+    cnt = 0
+    for r, dirs, files in os.walk(directory):
+        for dr in dirs:
+            cnt += len(glob.glob(os.path.join(r, dr + "/*")))
+    return cnt
 
-    imagePaths = []
-    for file in os.listdir(location):
-        new_location = location+file
-        if ('.jpg' not in file):
-            rec_imagePaths, rec_folders = (recursiveDir(new_location+'/',1))
-            imagePaths+=rec_imagePaths
-            folders+=rec_folders
-        else:
-            imagePaths.append(new_location)
 
-    return imagePaths, folders
+train_dir = '/home/ege/Desktop/machine learning/project/data/Yeni klasör TMM/'
 
-def prepareData(imagePaths): # image to array
+nb_train_samples = get_nb_files(train_dir)
+nb_classes = len(glob.glob(train_dir + "/*"))
+nb_epoch = 200
+batch_size = 1
 
-    data = []
-    for imagePath in imagePaths:
-        image = load_img(imagePath, target_size=(28,28),grayscale=True)
-        image = img_to_array(image)
-        image = image.astype('float32')
-        image /= 255
-        data.append(image)
+train_datagen = ImageDataGenerator(
+    rescale=1. / 255,
+    rotation_range=30,
+    width_shift_range=0.2,
+    height_shift_range=0.2,
+    shear_range=0.2,
+    zoom_range=0.2,
+    horizontal_flip=True
+)
 
-    return data
-
-paths, labels_count = recursiveDir(location,0)
-data = array(prepareData(paths))
-
-label_names = []
-labels = []
-for x in paths:
-    temp = x.split('/')[-2]
-    temp_array = np.zeros((1,labels_count))
-    if (temp not in label_names):
-        label_names.append(temp)
-    index=label_names.index(temp)
-    temp_array=temp_array[0]
-    temp_array[index]=1
-    labels.append(temp_array)
-labels = array(labels)
+train_generator = train_datagen.flow_from_directory(
+    train_dir,
+    target_size=(40, 40),
+    batch_size=batch_size
+)
 
 #model = ResNet50(weights="imagenet")
 model = Sequential()
 
-model.add(Convolution2D(32, (3, 3), activation='relu', input_shape=(28,28,1)))
+model.add(Convolution2D(32, (3, 3), activation='relu', input_shape=(40,40,3)))
 model.add(Convolution2D(32, (3, 3), activation='relu'))
 model.add(MaxPooling2D(pool_size=(2,2)))
 model.add(Dropout(0.25))
@@ -63,14 +58,19 @@ model.add(Dropout(0.25))
 model.add(Flatten())
 model.add(Dense(128, activation='relu'))
 model.add(Dropout(0.5))
-model.add(Dense(labels.shape[1], activation='softmax'))
+model.add(Dense(len(os.listdir(train_dir)), activation='softmax'))
 
 model.compile(loss='categorical_crossentropy',
               optimizer='adam',
               metrics=['accuracy'])
 
-print(data.shape,labels.shape[1])
-model.fit(data, labels, batch_size=128, epochs=300, verbose=1)
+model.fit_generator(
+            generator=train_generator,
+            steps_per_epoch=nb_train_samples,
+            epochs=nb_epoch,
+            class_weight='auto',
+            shuffle=True
+        )
 
 
 
