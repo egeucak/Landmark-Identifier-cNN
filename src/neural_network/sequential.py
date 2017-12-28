@@ -12,7 +12,7 @@ import glob
 
 #location = 'C:/Users/Mavi/PycharmProjects/wc/photographs/Yeni klasör TMM/'
 train_dir = '/home/ege/Desktop/machine learning/project/data/Yeni klasör TMM/'
-
+test_dir = ''
 def get_nb_files(directory):
     """Get number of files by searching directory recursively"""
     if not os.path.exists(directory):
@@ -50,23 +50,13 @@ train_generator = train_datagen.flow_from_directory(
     batch_size=batch_size
 )
 
-test_datagen = ImageDataGenerator(
-    rescale= 1. / 255,
-    rotation_range=30,
-    width_shift_range=0.2,
-    height_shift_range=0.2,
-    shear_range=0.2,
-    zoom_range=0.2,
-    horizontal_flip=True
-)
-
-test_generator = test_datagen.flow_from_directory(
+test_generator = train_datagen.flow_from_directory(
     test_dir,
-    target_size=im_size
+    target_size=im_size,
+    batch_size=batch_size
 )
 
-#model = ResNet50(weights="imagenet")
-model = Sequential()
+model = ResNet50(weights="imagenet")
 
 model.add(Convolution2D(32, (3, 3), activation='relu', input_shape=(40,40,3)))
 model.add(Convolution2D(32, (3, 3), activation='relu'))
