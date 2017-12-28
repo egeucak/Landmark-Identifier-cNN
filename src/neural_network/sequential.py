@@ -25,11 +25,14 @@ def get_nb_files(directory):
 
 
 train_dir = '/home/ege/Desktop/machine learning/project/data/Yeni klasör TMM/'
+test_dir = ''
 
 nb_train_samples = get_nb_files(train_dir)
 nb_classes = len(glob.glob(train_dir + "/*"))
 nb_epoch = 200
 batch_size = 1
+
+im_size = (50,50)
 
 train_datagen = ImageDataGenerator(
     rescale=1. / 255,
@@ -43,8 +46,23 @@ train_datagen = ImageDataGenerator(
 
 train_generator = train_datagen.flow_from_directory(
     train_dir,
-    target_size=(40, 40),
+    target_size=im_size,
     batch_size=batch_size
+)
+
+test_datagen = ImageDataGenerator(
+    rescale= 1. / 255,
+    rotation_range=30,
+    width_shift_range=0.2,
+    height_shift_range=0.2,
+    shear_range=0.2,
+    zoom_range=0.2,
+    horizontal_flip=True
+)
+
+test_generator = test_datagen.flow_from_directory(
+    test_dir,
+    target_size=im_size
 )
 
 #model = ResNet50(weights="imagenet")
@@ -66,11 +84,11 @@ model.compile(loss='categorical_crossentropy',
 
 model.fit_generator(
             generator=train_generator,
+            validation_data=test_generator,
             steps_per_epoch=nb_train_samples,
+            workers=20,
             epochs=nb_epoch,
             class_weight='auto',
-            shuffle=True
+            shuffle=True,
+            use_multiprocessing=True
         )
-
-
-
