@@ -1,10 +1,11 @@
 [X] Get images from flickr                  --> Ege
 [X] Get images from google locations        --> Serhat
-[\] Clear noisy images                      --> Serhat
-[ ] Learn keras
+[X] Clear noisy images                      --> Serhat
+[X] Learn keras
 [X] Extract features                        --> Ege
-[ ] Build neural network
-[ ] Test
-[ ] Test
-[ ] Improve
-[ ] Test
+[X] Build neural network
+[X] Test
+[X] Test
+[X] Improve
+[X] Test
+[\] Report
