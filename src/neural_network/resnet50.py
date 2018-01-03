@@ -7,8 +7,8 @@ from keras.optimizers import SGD
 import os
 import glob
 
-train_dir = 'C:/Users/Mavi/PycharmProjects/wc/images2/images_train/'
-test_dir = 'C:/Users/Mavi/PycharmProjects/wc/images2/images_test/'
+train_dir = '/home/ege/Desktop/machine learning/project/data/images2/images_train'
+test_dir = '/home/ege/Desktop/machine learning/project/data/images2/images_test/'
 
 def get_nb_files(directory):
     """Get number of files by searching directory recursively"""
@@ -68,46 +68,11 @@ predictions = Dense(176, activation='softmax')(x)
 # this is the model we will train
 model = Model(inputs=base_model.input, outputs=predictions)
 
-# first: train only the top layers (which were randomly initialized)
-# i.e. freeze all convolutional InceptionV3 layers
-'''for i, layer in enumerate(base_model.layers):
-   print(i, layer.name)'''
-
 for layer in base_model.layers:
     layer.trainable = False
 
-# compile the model (should be done *after* setting layers to non-trainable)
-#sgd = SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True)
-#model.compile(optimizer='rmsprop', loss='categorical_crossentropy', metrics=['accuracy'])
+model.load_weights("weights_res50.E048-L0.09-A0.975.hdf5")
 
-# train the model on the new data for a few epochs
-model.load_weights("weights_res50.E018-L1.13-A0.708.hdf5")
-
-'''check_point_file = "weights.E{epoch:03d}-L{loss:.2f}-A{acc:.3f}.hdf5" //already done
-check_point = keras.callbacks.ModelCheckpoint(filepath=check_point_file,
-                                                  monitor='val_acc',
-                                                  verbose=1
-                                                  )
-model.fit_generator(
-        generator=train_generator,
-        steps_per_epoch=nb_train_samples/64,
-        epochs=5,
-        class_weight='auto',
-        callbacks=[check_point],
-        validation_data=test_generator,
-        shuffle=True,
-        verbose=1
-    )'''
-#model.save("modelres50.h5")
-# at this point, the top layers are well trained and we can start fine-tuning
-# convolutional layers from inception V3. We will freeze the bottom N layers
-# and train the remaining top layers.
-
-# let's visualize layer names and layer indices to see how many layers
-# we should freeze:
-
-# we chose to train the top 2 inception blocks, i.e. we will freeze
-# the first 249 layers and unfreeze the rest:
 
 for layer in model.layers[:153]:
    layer.trainable = False
@@ -117,11 +82,9 @@ for layer in model.layers[153:]:
 # we need to recompile the model for these modifications to take effect
 # we use SGD with a low learning rate
 
-sgd = SGD(lr=0.001, momentum=0.9)
-model.compile(optimizer=sgd, loss='categorical_crossentropy', metrics=['accuracy'])
+sgd = SGD(lr=0.0001, momentum=0.9, nesterov=True, decay=1e-6)
+model.compile(optimizer=sgd, loss='categorical_crossentropy', metrics=['accuracy', 'top_k_categorical_accuracy'])
 
-# we train our model again (this time fine-tuning the top 2 inception blocks
-# alongside the top Dense layers
 try:
 
     check_point_file = "weights_res50.E{epoch:03d}-L{loss:.2f}-A{acc:.3f}.hdf5"
@@ -137,8 +100,8 @@ try:
             class_weight='auto',
             callbacks=[check_point],
             validation_data=test_generator,
-            shuffle=True,
-            verbose=1
+            shuffle=True
+            #verbose=1
     )
 
     model.save("model.h5")
