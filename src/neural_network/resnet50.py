@@ -53,7 +53,7 @@ test_generator = test_datagen.flow_from_directory(
     target_size=(224,224),
     batch_size=batch_size
 )
-'''
+
 # create the base pre-trained model
 base_model = ResNet50(weights='imagenet', include_top=False, input_shape=(224,224,3))
 
@@ -62,7 +62,7 @@ x = base_model.output
 x = GlobalAveragePooling2D()(x)
 # let's add a fully-connected layer
 x = Dense(1024, activation='relu')(x)
-# and a logistic layer -- let's say we have 176 classes
+# and a logistic layer
 predictions = Dense(176, activation='softmax')(x)
 
 # this is the model we will train
@@ -71,8 +71,7 @@ model = Model(inputs=base_model.input, outputs=predictions)
 for layer in base_model.layers:
     layer.trainable = False
 
-model.load_weights("weights_res50.E048-L0.09-A0.975.hdf5")
-
+model.load_weights("weights_res50.E048-L0.09-A0.975.hdf5") #We don't need to train here anymore
 
 for layer in model.layers[:153]:
    layer.trainable = False
@@ -108,4 +107,3 @@ try:
 except Exception as e:
     print(e)
     model.save("model.h5")
-'''
