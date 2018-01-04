@@ -52,11 +52,13 @@ model.compile(optimizer=sgd, loss='categorical_crossentropy', metrics=['accuracy
 
 while 1:
     try:
-        im_location = input("Please enter location of image to be predicted...\n>>>")
+        im_location = input("Please enter location of image to be predicted...\n>>> ")
         if im_location == 'e': break
         img = cv2.imread(im_location)/255.
+        img = np.array(img)
         img = resize(img, (224, 224), mode='constant')
-        img = np.reshape(img, (1, 224, 224, 3))
+        #img = np.reshape(img, (1, 224, 224, 3))
+        img = np.expand_dims(img, axis=0)
         prediction = model.predict(img)
         print(encode_prediction(prediction, 5))
         print("*"*20)

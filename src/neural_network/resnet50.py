@@ -53,7 +53,7 @@ test_generator = test_datagen.flow_from_directory(
     target_size=(224,224),
     batch_size=batch_size
 )
-
+'''
 # create the base pre-trained model
 base_model = ResNet50(weights='imagenet', include_top=False, input_shape=(224,224,3))
 
@@ -108,3 +108,4 @@ try:
 except Exception as e:
     print(e)
     model.save("model.h5")
+'''
