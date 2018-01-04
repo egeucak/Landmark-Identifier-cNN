@@ -3,13 +3,17 @@ import math
 import random
 import shutil
 
-location = 'C:/Users/Mavi/PycharmProjects/wc/photographs/Yeni klasör TMM/'
+'''
+Creates two new folders (train and test).
+Randomly copies images from the main folder to new folders.
+'''
 
+train_dir = 'C:/Users/Mavi/PycharmProjects/wc/photographs/Yeni klasör TMM/'
 def recursiveDir(base_location,location,ratio): #gets image paths
 
     for file in os.listdir(location):
         new_location = location+file
-        if ('.jpg' not in file):
+        if ('.jpg' not in file and '.jpeg' not in file and '.png' not in file and '.bmp' not in file and '.gif' not in file):
             rec_imagePaths = (recursiveDir(base_location,new_location+'/',ratio))
             split_data(base_location,new_location+'/',ratio)
 
@@ -47,4 +51,4 @@ def copy_files(paths,target_path):
         file_name = path.split('/')[-1]
         shutil.copy2(path,target_path+label+'/'+file_name)
 
-paths = recursiveDir(location,location,0.2)
+paths = recursiveDir(train_dir ,train_dir ,0.2)
